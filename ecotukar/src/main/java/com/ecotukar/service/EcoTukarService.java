@@ -3,6 +3,8 @@ package com.ecotukar.service;
 import com.ecotukar.model.User;
 import com.ecotukar.model.PickupRequest;
 import com.ecotukar.model.WalletTransaction;
+import com.ecotukar.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,11 +18,11 @@ public class EcoTukarService {
     private final List<WalletTransaction> transactions = new ArrayList<>();
     private final AtomicInteger requestCounter = new AtomicInteger(1046); // Start from REQ-1046
 
+    @Autowired
+    private UserRepository userRepository;
+
     public EcoTukarService() {
-        // Initialize Default Mock Users
-        users.add(new User("sarah", "Sarah Putri", "sarah.putri@mail.com", "CUSTOMER", "👩‍🦰", "Jl. Melati No. 21, Bandung", "Maret 2025", 1240, 0));
-        users.add(new User("budi", "Budi Santoso", "budi.s@mail.com", "COURIER", "👷", "Hub Bandung", "Januari 2025", 0, 0));
-        users.add(new User("admin", "EcoTukar Admin", "admin@ecotukar.id", "ADMIN", "💼", "Kantor Pusat Bandung", "Desember 2024", 0, 0));
+        // Initialize Default Mock Users removed to use Database
 
         // Initialize Default Mock Pickup Tickets
         pickups.add(new PickupRequest("REQ-1041", "sarah", "Sarah Putri", "Jl. Melati No. 21", "Plastik", 3.0, "2026-05-20", "Letakkan di pagar", "Budi S.", "ASSIGNED", "09:00"));
@@ -45,6 +47,9 @@ public class EcoTukarService {
     }
 
     public User getUserByUsername(String username) {
+        User dbUser = userRepository.findByUsername(username);
+        if (dbUser != null) return dbUser;
+        
         return users.stream()
                 .filter(u -> u.getUsername().equalsIgnoreCase(username))
                 .findFirst()

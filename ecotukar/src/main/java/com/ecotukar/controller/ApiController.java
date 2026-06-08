@@ -21,9 +21,10 @@ public class ApiController {
         this.service = service;
     }
 
-    // Get current customer profile (defaults to "sarah")
+    // Get current customer profile
     @GetMapping("/profile")
-    public User getProfile(@RequestParam(defaultValue = "sarah") String username) {
+    public User getProfile(java.security.Principal principal) {
+        String username = (principal != null) ? principal.getName() : "sarah";
         User user = service.getUserByUsername(username);
         if (user == null) {
             // Safe fallback
@@ -40,12 +41,12 @@ public class ApiController {
 
     // Create a new pickup request
     @PostMapping("/pickups")
-    public PickupRequest createPickup(@RequestBody Map<String, Object> body) {
+    public PickupRequest createPickup(@RequestBody Map<String, Object> body, java.security.Principal principal) {
         String wasteType = (String) body.getOrDefault("wasteType", "Plastik");
         double weight = Double.parseDouble(body.getOrDefault("weight", "1.0").toString());
         String date = (String) body.getOrDefault("date", "Hari Ini");
         String note = (String) body.getOrDefault("note", "");
-        String username = (String) body.getOrDefault("username", "sarah");
+        String username = (principal != null) ? principal.getName() : (String) body.getOrDefault("username", "sarah");
         
         if (weight < 3.0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Estimasi berat minimal 3 kg!");
@@ -93,8 +94,8 @@ public class ApiController {
 
     // Convert coins to ewallet balance
     @PostMapping("/wallet/convert")
-    public Map<String, Object> convertCoinsToEWallet(@RequestBody Map<String, Object> body) {
-        String username = (String) body.getOrDefault("username", "sarah");
+    public Map<String, Object> convertCoinsToEWallet(@RequestBody Map<String, Object> body, java.security.Principal principal) {
+        String username = (principal != null) ? principal.getName() : (String) body.getOrDefault("username", "sarah");
         int coins = Integer.parseInt(body.get("coins").toString());
 
         if (coins < 600) {
