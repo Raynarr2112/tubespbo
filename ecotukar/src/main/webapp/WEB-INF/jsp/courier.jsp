@@ -19,16 +19,7 @@
 </head>
 <body class="min-h-screen bg-emerald-50/40 font-sans text-slate-800 antialiased">
 
-    <!-- ===== Floating Role Switcher for Verification ===== -->
-    <div class="fixed bottom-6 right-6 z-50 bg-emerald-900/95 backdrop-blur-md text-emerald-100 p-4 rounded-2xl shadow-2xl border border-emerald-700/50 max-w-xs transition-all hover:scale-105">
-        <p class="text-xs font-bold uppercase tracking-wider mb-2 text-emerald-400">⚡ Simulator Peran (Verify Flow)</p>
-        <div class="grid grid-cols-2 gap-1.5 text-[11px] font-semibold">
-            <a href="/" class="px-2.5 py-1.5 rounded-lg bg-emerald-950/50 hover:bg-emerald-800 hover:text-white transition text-center text-emerald-300">🏠 Home</a>
-            <a href="/customer" class="px-2.5 py-1.5 rounded-lg bg-emerald-950/50 hover:bg-emerald-800 hover:text-white transition text-center text-emerald-300">👩‍🦰 Customer</a>
-            <a href="/courier" class="px-2.5 py-1.5 rounded-lg bg-emerald-800 text-white border border-emerald-600/50 text-center">👷 Kurir</a>
-            <a href="/admin" class="px-2.5 py-1.5 rounded-lg bg-emerald-950/50 hover:bg-emerald-800 hover:text-white transition text-center text-emerald-300">💼 Admin</a>
-        </div>
-    </div>
+
 
     <!-- Mobile-First Container, centered on larger displays -->
     <div class="max-w-md mx-auto pb-28 min-h-screen bg-slate-50 shadow-2xl flex flex-col relative border-x border-emerald-100">
@@ -40,18 +31,13 @@
                     <div class="w-12 h-12 rounded-full bg-white/20 border border-white/10 grid place-items-center text-2xl shadow-inner">👷</div>
                     <div>
                         <p class="text-[10px] uppercase font-bold tracking-wider text-emerald-100">Selamat Tugas,</p>
-                        <p class="font-extrabold text-base" id="courier-name">Memuat...</p>
+                        <p class="font-extrabold text-base" id="courier-name">Budi Santoso</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <button class="w-10 h-10 rounded-full bg-white/15 hover:bg-white/20 flex items-center justify-center font-bold relative transition">
-                        🔔
-                        <div class="absolute top-2 right-2 w-2 h-2 bg-amber-400 rounded-full"></div>
-                    </button>
-                    <a href="/logout" class="w-10 h-10 rounded-full bg-rose-500/80 hover:bg-rose-600 text-white flex items-center justify-center font-bold transition" title="Keluar">
-                        🚪
-                    </a>
-                </div>
+                <button class="w-10 h-10 rounded-full bg-white/15 hover:bg-white/20 flex items-center justify-center font-bold relative transition">
+                    🔔
+                    <div class="absolute top-2 right-2 w-2 h-2 bg-amber-400 rounded-full"></div>
+                </button>
             </div>
 
             <!-- Dashboard Summary Statistics -->
@@ -85,7 +71,7 @@
         </main>
 
         <!-- ===== Mobile Bottom Navigation Bar ===== -->
-        <nav class="absolute bottom-0 inset-x-0 bg-white border-t border-slate-100 grid grid-cols-4 py-3 text-[10px] font-bold text-slate-400">
+        <nav class="absolute bottom-0 inset-x-0 bg-white border-t border-slate-100 grid grid-cols-5 py-3 text-[10px] font-bold text-slate-400">
             <button class="flex flex-col items-center gap-1 text-emerald-600">
                 <span class="text-xl">🏠</span>Beranda
             </button>
@@ -98,6 +84,11 @@
             <button class="flex flex-col items-center gap-1 hover:text-emerald-600 transition">
                 <span class="text-xl">👤</span>Profil
             </button>
+            <form action="/logout" method="post" class="w-full h-full m-0 p-0">
+                <button type="submit" class="w-full h-full flex flex-col items-center gap-1 hover:text-rose-600 transition">
+                    <span class="text-xl">🚪</span>Keluar
+                </button>
+            </form>
         </nav>
     </div>
 
@@ -106,23 +97,27 @@
         const taskList = document.getElementById('task-list');
         const statPickups = document.getElementById('stat-pickups');
         const statWeight = document.getElementById('stat-weight');
+        const courierNameEl = document.getElementById('courier-name');
 
-        // Fetch assigned pickup tickets
+        const loggedInUser = '<%= request.getUserPrincipal() != null ? request.getUserPrincipal().getName() : "budi" %>';
+
+        // Fetch profile and assigned pickup tickets
         async function fetchCourierRoutes() {
             try {
-                // Get active logged in courier details
-                const profileRes = await fetch('/api/profile');
-                const user = await profileRes.json();
-                document.getElementById('courier-name').innerText = user.name;
+                // Fetch Profile first to get the Display Name (which is used in pickups assignment)
+                const resProfile = await fetch(`/api/profile?username=${loggedInUser}`);
+                const profile = await resProfile.json();
+                
+                courierNameEl.innerText = profile.name;
 
                 const res = await fetch('/api/pickups');
                 const pickups = await res.json();
 
-                // Filter for this courier's assigned requests
-                const budiPickups = pickups.filter(p => p.courier === user.name || p.courier.includes(user.name.split(' ')[0]) || p.courier === 'Budi S.');
+                // Filter for requests assigned to THIS courier's name
+                const myPickups = pickups.filter(p => p.courier === profile.name);
                 
                 // Count active pending tasks
-                const activeTasks = budiPickups.filter(p => p.status !== 'COMPLETED' && p.status !== 'CANCELLED');
+                const activeTasks = myPickups.filter(p => p.status !== 'COMPLETED' && p.status !== 'CANCELLED');
                 statPickups.innerText = activeTasks.length;
 
                 // Total estimated weight for active tasks
@@ -133,7 +128,7 @@
                 // Render lists
                 taskList.innerHTML = '';
 
-                if (budiPickups.length === 0) {
+                if (myPickups.length === 0) {
                     taskList.innerHTML = `
                         <div class="text-center py-10 text-slate-400 space-y-2">
                             <p class="text-4xl">📭</p>
@@ -143,7 +138,7 @@
                     return;
                 }
 
-                budiPickups.forEach((p, idx) => {
+                myPickups.forEach((p, idx) => {
                     const statusConfig = getStatusConfig(p.status);
                     
                     // Conditionally render action buttons based on status
@@ -199,7 +194,7 @@
                                     ${p.note ? `<p class="text-[10px] text-amber-600 bg-amber-50 px-2 py-1.5 rounded-lg border border-amber-100 font-medium">💬 Catatan: "${p.note}"</p>` : ''}
                                     <div class="flex flex-wrap gap-1.5 pt-2 text-[10px] font-bold">
                                         <span class="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-100">${p.wasteType} • ${p.estimatedWeight} kg</span>
-                                        <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-500 border border-slate-200">⏱️ ${p.time}</span>
+                                        <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-500 border border-slate-200">🗓️ ${p.date} • ⏱️ ${p.time}</span>
                                     </div>
                                 </div>
                             </div>

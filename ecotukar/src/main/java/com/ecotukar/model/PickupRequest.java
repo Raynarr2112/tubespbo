@@ -1,7 +1,14 @@
 package com.ecotukar.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "pickup_requests")
 public class PickupRequest {
+    
+    @Id
     private String id; // REQ-XXXX
+    
     private String username;
     private String customerName;
     private String address;
@@ -13,12 +20,11 @@ public class PickupRequest {
     private String courier; // Assigned courier name or "Belum"
     private String status; // PENDING, ASSIGNED, ON_ROUTE, COMPLETED, CANCELLED
     private String time; // Simulated pickup target time
-    private String verificationStatus; // UNVERIFIED, VERIFIED, REJECTED
 
     public PickupRequest() {}
 
     public PickupRequest(String id, String username, String customerName, String address, String wasteType, 
-                         double estimatedWeight, String date, String note, String courier, String status, String time, String verificationStatus) {
+                         double estimatedWeight, String date, String note, String courier, String status, String time) {
         this.id = id;
         this.username = username;
         this.customerName = customerName;
@@ -31,7 +37,6 @@ public class PickupRequest {
         this.courier = courier;
         this.status = status;
         this.time = time;
-        this.verificationStatus = verificationStatus;
     }
 
     public String getId() { return id; }
@@ -69,7 +74,4 @@ public class PickupRequest {
 
     public String getTime() { return time; }
     public void setTime(String time) { this.time = time; }
-
-    public String getVerificationStatus() { return verificationStatus; }
-    public void setVerificationStatus(String verificationStatus) { this.verificationStatus = verificationStatus; }
 }

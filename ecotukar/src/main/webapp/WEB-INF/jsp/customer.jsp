@@ -21,16 +21,7 @@
 </head>
 <body class="min-h-screen bg-emerald-50/30 font-sans text-slate-800 flex flex-col lg:flex-row antialiased">
 
-    <!-- ===== Floating Role Switcher for Verification ===== -->
-    <div class="fixed bottom-6 right-6 z-50 bg-emerald-900/95 backdrop-blur-md text-emerald-100 p-4 rounded-2xl shadow-2xl border border-emerald-700/50 max-w-xs transition-all hover:scale-105">
-        <p class="text-xs font-bold uppercase tracking-wider mb-2 text-emerald-400">⚡ Simulator Peran (Verify Flow)</p>
-        <div class="grid grid-cols-2 gap-1.5 text-[11px] font-semibold">
-            <a href="/" class="px-2.5 py-1.5 rounded-lg bg-emerald-950/50 hover:bg-emerald-800 hover:text-white transition text-center text-emerald-300">🏠 Home</a>
-            <a href="/customer" class="px-2.5 py-1.5 rounded-lg bg-emerald-800 text-white border border-emerald-600/50 text-center">👩‍🦰 Customer</a>
-            <a href="/courier" class="px-2.5 py-1.5 rounded-lg bg-emerald-950/50 hover:bg-emerald-800 hover:text-white transition text-center text-emerald-300">👷 Kurir</a>
-            <a href="/admin" class="px-2.5 py-1.5 rounded-lg bg-emerald-950/50 hover:bg-emerald-800 hover:text-white transition text-center text-emerald-300">💼 Admin</a>
-        </div>
-    </div>
+
 
     <!-- ===== Sidebar ===== -->
     <aside class="hidden lg:flex w-64 bg-white border-r border-emerald-100 flex-col p-6 shrink-0 shadow-sm">
@@ -38,15 +29,15 @@
             <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 grid place-items-center text-white font-extrabold shadow-md">E</div>
             <span class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-emerald-700 to-green-700 bg-clip-text text-transparent">EcoTukar</span>
         </div>
-        <nav class="space-y-2 text-sm font-semibold text-slate-500 flex-1 flex flex-col justify-between">
-            <div class="space-y-2">
-                <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-emerald-50 text-emerald-700 transition">🏠 Dashboard</a>
-                <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-emerald-50/50 hover:text-emerald-700 transition">📦 Riwayat Pickup</a>
-                <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-emerald-50/50 hover:text-emerald-700 transition">🪙 E-Wallet</a>
-                <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-emerald-50/50 hover:text-emerald-700 transition">🎁 Reward</a>
-                <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-emerald-50/50 hover:text-emerald-700 transition">⚙️ Pengaturan</a>
-            </div>
-            <a href="/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl text-rose-500 hover:bg-rose-50 hover:text-rose-700 transition font-bold border border-rose-100/50 mt-10">🚪 Keluar (Logout)</a>
+        <nav class="space-y-2 text-sm font-semibold text-slate-500 font-semibold">
+            <a onclick="switchTab('dashboard')" id="nav-dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-emerald-50 text-emerald-700 transition cursor-pointer">🏠 Dashboard</a>
+            <a onclick="switchTab('history')" id="nav-history" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-emerald-50/50 hover:text-emerald-700 transition cursor-pointer">📦 Riwayat Pickup</a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-emerald-50/50 hover:text-emerald-700 transition cursor-pointer">🪙 E-Wallet</a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-emerald-50/50 hover:text-emerald-700 transition cursor-pointer">🎁 Reward</a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-emerald-50/50 hover:text-emerald-700 transition cursor-pointer">⚙️ Pengaturan</a>
+            <form action="/logout" method="post" class="mt-8 border-t border-emerald-50 pt-4">
+                <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-rose-500 hover:bg-rose-50 hover:text-rose-700 transition font-bold">🚪 Keluar</button>
+            </form>
         </nav>
     </aside>
 
@@ -66,6 +57,9 @@
                 <div class="absolute top-1 right-1 w-2.5 h-2.5 bg-rose-500 rounded-full border border-white"></div>
             </div>
         </div>
+
+        <!-- ===== VIEW: DASHBOARD ===== -->
+        <div id="view-dashboard" class="space-y-8 block animate-in fade-in duration-300">
 
         <!-- ===== Profile Section ===== -->
         <section class="bg-white rounded-2xl p-6 border border-emerald-100/70 shadow-sm flex flex-col md:flex-row items-center gap-6">
@@ -107,7 +101,7 @@
                         <input id="weight" type="number" min="1" value="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200/50 focus:outline-none transition font-semibold text-slate-700 bg-slate-50" />
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tanggal Penjemputan</label>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Tanggal Permintaan</label>
                         <input id="date" type="date" value="2026-06-03" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200/50 focus:outline-none transition font-semibold text-slate-700 bg-slate-50" />
                     </div>
                     <div>
@@ -188,10 +182,53 @@
                 <canvas id="weightChart"></canvas>
             </div>
         </section>
+        
+        </div> <!-- End of VIEW: DASHBOARD -->
+
+        <!-- ===== VIEW: HISTORY ===== -->
+        <div id="view-history" class="hidden animate-in fade-in duration-300">
+            <!-- ===== Pickup History ===== -->
+            <section class="bg-white rounded-2xl border border-emerald-100/70 shadow-sm overflow-hidden">
+                <div class="px-6 py-5 border-b border-slate-100">
+                    <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">📋 Riwayat Permintaan Pickup</h3>
+                    <p class="text-xs text-slate-400 mt-1">Lacak status penjemputan sampahmu di sini.</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead class="bg-slate-50 text-slate-500 uppercase tracking-widest text-[10px] font-extrabold">
+                            <tr>
+                                <th class="px-6 py-3">ID</th>
+                                <th class="px-6 py-3">Tanggal / Waktu</th>
+                                <th class="px-6 py-3">Jenis Sampah</th>
+                                <th class="px-6 py-3 text-center">Estimasi (kg)</th>
+                                <th class="px-6 py-3">Kurir</th>
+                                <th class="px-6 py-3">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100" id="pickup-history-rows">
+                            <!-- Loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div> <!-- End of VIEW: HISTORY -->
+
     </main>
 
     <!-- ===== JS Logic for API Sync ===== -->
     <script>
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.getElementById('view-dashboard').classList.add('hidden');
+            document.getElementById('view-history').classList.add('hidden');
+            
+            document.getElementById('nav-dashboard').className = "flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-emerald-50/50 hover:text-emerald-700 transition cursor-pointer";
+            document.getElementById('nav-history').className = "flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-emerald-50/50 hover:text-emerald-700 transition cursor-pointer";
+
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+            document.getElementById(`nav-${tabId}`).className = "flex items-center gap-3 px-4 py-3 rounded-xl bg-emerald-50 text-emerald-700 transition cursor-pointer";
+        }
+
         // Set modern input date defaults
         document.getElementById('date').valueAsDate = new Date();
 
@@ -212,11 +249,12 @@
         const impactCount = document.getElementById('impact-count');
 
         let chart;
+        const loggedInUser = '<%= request.getUserPrincipal() != null ? request.getUserPrincipal().getName() : "sarah" %>';
 
         // Fetch profile data
         async function fetchProfile() {
             try {
-                const res = await fetch('/api/profile');
+                const res = await fetch(`/api/profile?username=${loggedInUser}`);
                 const user = await res.json();
                 
                 // Update views
@@ -240,7 +278,7 @@
         async function fetchTransactionsAndRecalc(currentPoints) {
             try {
                 // Fetch Wallet Point History
-                const res = await fetch('/api/transactions');
+                const res = await fetch(`/api/transactions?username=${loggedInUser}`);
                 const history = await res.json();
 
                 // Populate history
@@ -263,7 +301,66 @@
                 const resPickups = await fetch('/api/pickups');
                 const pickups = await resPickups.json();
                 
-                const completedPickups = pickups.filter(p => p.username === 'sarah' && p.status === 'COMPLETED');
+                // Filter pickups for this user
+                const userPickups = pickups.filter(p => p.username === loggedInUser);
+                
+                // Populate Pickup History Table
+                const pickupHistoryRows = document.getElementById('pickup-history-rows');
+                pickupHistoryRows.innerHTML = '';
+                
+                if (userPickups.length === 0) {
+                    pickupHistoryRows.innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-slate-400 font-medium text-xs">Belum ada riwayat penjemputan.</td></tr>`;
+                } else {
+                    userPickups.reverse().forEach(p => {
+                        let statusColor = "bg-slate-100 text-slate-500 border-slate-200";
+                        let statusText = "Menunggu Admin";
+                        
+                        if (p.status === 'ASSIGNED') {
+                            statusColor = "bg-amber-100 text-amber-700 border-amber-200";
+                            statusText = "Telah Dijadwalkan";
+                        } else if (p.status === 'ON_ROUTE') {
+                            statusColor = "bg-blue-100 text-blue-700 border-blue-200";
+                            statusText = "Kurir Menuju Lokasi";
+                        } else if (p.status === 'PICKED_UP') {
+                            statusColor = "bg-indigo-100 text-indigo-700 border-indigo-200";
+                            statusText = "Sampah Diangkut";
+                        } else if (p.status === 'COMPLETED') {
+                            statusColor = "bg-emerald-100 text-emerald-700 border-emerald-200";
+                            statusText = "Selesai (Koin Diterima)";
+                        } else if (p.status === 'CANCELLED') {
+                            statusColor = "bg-rose-100 text-rose-700 border-rose-200";
+                            statusText = "Dibatalkan";
+                        }
+
+                        let dateLabel = "📅 Permintaan";
+                        let dateColor = "text-slate-500";
+                        if (p.status !== 'PENDING') {
+                            dateLabel = "🚛 Jadwal Jemput";
+                            dateColor = "text-indigo-600";
+                        }
+
+                        pickupHistoryRows.innerHTML += `
+                            <tr class="hover:bg-emerald-50/30 transition">
+                                <td class="px-6 py-4 font-mono text-[10px] text-slate-400 font-bold">${p.id}</td>
+                                <td class="px-6 py-4">
+                                    <div class="text-[9px] uppercase tracking-wider font-extrabold ${dateColor} mb-0.5">${dateLabel}</div>
+                                    <div class="text-xs font-bold text-slate-700">${p.date}</div>
+                                    <div class="text-[10px] text-slate-500 font-medium mt-0.5">${p.time || '-'}</div>
+                                </td>
+                                <td class="px-6 py-4 text-xs font-bold text-slate-600">${p.wasteType}</td>
+                                <td class="px-6 py-4 text-center text-xs font-bold text-slate-600">${p.estimatedWeight} kg</td>
+                                <td class="px-6 py-4 text-xs font-bold ${p.courier ? 'text-emerald-600' : 'text-slate-400'}">${p.courier || 'Belum Ditentukan'}</td>
+                                <td class="px-6 py-4">
+                                    <span class="text-[9px] font-extrabold px-2.5 py-1 rounded-md border uppercase tracking-wider ${statusColor}">
+                                        ${statusText}
+                                    </span>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                const completedPickups = userPickups.filter(p => p.status === 'COMPLETED');
                 const pickupTimes = completedPickups.length;
 
                 // Total actual weight
@@ -350,7 +447,7 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        wasteType, weight, date, note, username: 'sarah'
+                        wasteType, weight, date, note, username: loggedInUser
                     })
                 });
 

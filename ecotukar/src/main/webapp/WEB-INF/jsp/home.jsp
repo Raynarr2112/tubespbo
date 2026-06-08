@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="true" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -19,16 +19,7 @@
 </head>
 <body class="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-emerald-50/50 text-slate-800 antialiased">
 
-    <!-- ===== Floating Role Switcher for Verification ===== -->
-    <div class="fixed bottom-6 right-6 z-50 bg-emerald-900/95 backdrop-blur-md text-emerald-100 p-4 rounded-2xl shadow-2xl border border-emerald-700/50 max-w-xs transition-all hover:scale-105">
-        <p class="text-xs font-bold uppercase tracking-wider mb-2 text-emerald-400">⚡ Simulator Peran (Verify Flow)</p>
-        <div class="grid grid-cols-2 gap-1.5 text-[11px] font-semibold">
-            <a href="/" class="px-2.5 py-1.5 rounded-lg bg-emerald-800 text-white border border-emerald-600/50 text-center">🏠 Home</a>
-            <a href="/customer" class="px-2.5 py-1.5 rounded-lg bg-emerald-950/50 hover:bg-emerald-800 hover:text-white transition text-center text-emerald-300">👩‍🦰 Customer</a>
-            <a href="/courier" class="px-2.5 py-1.5 rounded-lg bg-emerald-950/50 hover:bg-emerald-800 hover:text-white transition text-center text-emerald-300">👷 Kurir</a>
-            <a href="/admin" class="px-2.5 py-1.5 rounded-lg bg-emerald-950/50 hover:bg-emerald-800 hover:text-white transition text-center text-emerald-300">💼 Admin</a>
-        </div>
-    </div>
+
 
     <!-- ===== Navbar ===== -->
     <header class="sticky top-0 z-40 backdrop-blur-md bg-white/75 border-b border-emerald-100/80">
@@ -47,7 +38,7 @@
             </a>
         </nav>
     </header>
- 
+
     <!-- ===== Hero Section ===== -->
     <section class="max-w-7xl mx-auto px-6 pt-16 pb-24 grid md:grid-cols-2 gap-12 items-center">
         <div class="space-y-6">
