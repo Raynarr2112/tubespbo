@@ -4,6 +4,8 @@ C:\Users\ASUS\Documents\GitHub\tubespbo\ecotukar\src\main\java\com\ecotukar\cont
 C:\Users\ASUS\Documents\GitHub\tubespbo\ecotukar\src\main\java\com\ecotukar\repository\ProfilCustomerRepository.java
 C:\Users\ASUS\Documents\GitHub\tubespbo\ecotukar\src\main\java\com\ecotukar\repository\RequestSampahRepository.java
 C:\Users\ASUS\Documents\GitHub\tubespbo\ecotukar\src\main\java\com\ecotukar\model\PermintaanPenjemputan.java
+C:\Users\ASUS\Documents\GitHub\tubespbo\ecotukar\src\main\java\com\ecotukar\model\ProfilPengguna.java
+C:\Users\ASUS\Documents\GitHub\tubespbo\ecotukar\src\main\java\com\ecotukar\exception\InvalidPickupRequestException.java
 C:\Users\ASUS\Documents\GitHub\tubespbo\ecotukar\src\main\java\com\ecotukar\model\User.java
 C:\Users\ASUS\Documents\GitHub\tubespbo\ecotukar\src\main\java\com\ecotukar\model\WalletTransaction.java
 C:\Users\ASUS\Documents\GitHub\tubespbo\ecotukar\src\main\java\com\ecotukar\repository\PermintaanPenjemputanRepository.java

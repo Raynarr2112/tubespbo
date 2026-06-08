@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface PermintaanPenjemputanRepository extends JpaRepository<PermintaanPenjemputan, Integer> {
-    Optional<PermintaanPenjemputan> findByIdRequest(Integer idRequest);
-    List<PermintaanPenjemputan> findByIdTukang(Integer idTukang);
+    Optional<PermintaanPenjemputan> findByRequestSampahIdRequest(Integer idRequest);
+    List<PermintaanPenjemputan> findByTukangIdTukang(Integer idTukang);
 }

@@ -11,11 +11,13 @@ public class PermintaanPenjemputan {
     @Column(name = "id_verifikasi")
     private Integer idVerifikasi;
 
-    @Column(name = "id_request", nullable = false)
-    private Integer idRequest;
+    @OneToOne
+    @JoinColumn(name = "id_request", nullable = false)
+    private RequestSampah requestSampah;
 
-    @Column(name = "id_tukang", nullable = false)
-    private Integer idTukang; // id_akun of courier (tukang)
+    @ManyToOne
+    @JoinColumn(name = "id_tukang", nullable = false)
+    private ProfilTukang tukang;
 
     @Column(name = "berat_aktual", nullable = false)
     private Double beratAktual = 0.0;
@@ -26,23 +28,27 @@ public class PermintaanPenjemputan {
     @Column(name = "waktu_verifikasi", insertable = false, updatable = false)
     private LocalDateTime waktuVerifikasi;
 
+    @Column(name = "status_verifikasi", length = 20)
+    private String statusVerifikasi = "UNVERIFIED";
+
     public PermintaanPenjemputan() {}
 
-    public PermintaanPenjemputan(Integer idRequest, Integer idTukang) {
-        this.idRequest = idRequest;
-        this.idTukang = idTukang;
+    public PermintaanPenjemputan(RequestSampah requestSampah, ProfilTukang tukang) {
+        this.requestSampah = requestSampah;
+        this.tukang = tukang;
         this.beratAktual = 0.0;
         this.catatanFisik = "";
+        this.statusVerifikasi = "UNVERIFIED";
     }
 
     public Integer getIdVerifikasi() { return idVerifikasi; }
     public void setIdVerifikasi(Integer idVerifikasi) { this.idVerifikasi = idVerifikasi; }
 
-    public Integer getIdRequest() { return idRequest; }
-    public void setIdRequest(Integer idRequest) { this.idRequest = idRequest; }
+    public RequestSampah getRequestSampah() { return requestSampah; }
+    public void setRequestSampah(RequestSampah requestSampah) { this.requestSampah = requestSampah; }
 
-    public Integer getIdTukang() { return idTukang; }
-    public void setIdTukang(Integer idTukang) { this.idTukang = idTukang; }
+    public ProfilTukang getTukang() { return tukang; }
+    public void setTukang(ProfilTukang tukang) { this.tukang = tukang; }
 
     public Double getBeratAktual() { return beratAktual; }
     public void setBeratAktual(Double beratAktual) { this.beratAktual = beratAktual; }
@@ -52,4 +58,7 @@ public class PermintaanPenjemputan {
 
     public LocalDateTime getWaktuVerifikasi() { return waktuVerifikasi; }
     public void setWaktuVerifikasi(LocalDateTime waktuVerifikasi) { this.waktuVerifikasi = waktuVerifikasi; }
+
+    public String getStatusVerifikasi() { return statusVerifikasi; }
+    public void setStatusVerifikasi(String statusVerifikasi) { this.statusVerifikasi = statusVerifikasi; }
 }

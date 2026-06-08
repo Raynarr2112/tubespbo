@@ -1,5 +1,6 @@
 com\ecotukar\controller\ViewController.class
 com\ecotukar\model\Akun.class
+com\ecotukar\model\ProfilPengguna.class
 com\ecotukar\repository\AkunRepository.class
 com\ecotukar\model\User.class
 com\ecotukar\model\ProfilCustomer.class
@@ -8,6 +9,7 @@ com\ecotukar\model\PermintaanPenjemputan.class
 com\ecotukar\model\WalletTransaction.class
 com\ecotukar\EcoTukarApplication.class
 com\ecotukar\service\EcoTukarService.class
+com\ecotukar\exception\InvalidPickupRequestException.class
 com\ecotukar\model\RequestSampah.class
 com\ecotukar\model\ProfilTukang.class
 com\ecotukar\model\ProfilAdmin.class

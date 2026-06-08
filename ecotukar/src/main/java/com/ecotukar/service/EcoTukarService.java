@@ -173,15 +173,14 @@ public class EcoTukarService {
 
         String courierName = "Belum";
         double actualWeight = 0.0;
-        Optional<PermintaanPenjemputan> verif = verifikasiRepo.findByIdRequest(req.getIdRequest());
+        String verifStatus = "UNVERIFIED";
+        Optional<PermintaanPenjemputan> verif = verifikasiRepo.findByRequestSampahIdRequest(req.getIdRequest());
         if (verif.isPresent()) {
             actualWeight = verif.get().getBeratAktual();
-            Optional<Akun> courierAkun = akunRepo.findById(verif.get().getIdTukang());
-            if (courierAkun.isPresent()) {
-                Optional<ProfilTukang> tkgProf = tukangRepo.findByIdAkun(courierAkun.get().getIdAkun());
-                if (tkgProf.isPresent()) {
-                    courierName = tkgProf.get().getNamaLengkap();
-                }
+            verifStatus = verif.get().getStatusVerifikasi();
+            ProfilTukang tkg = verif.get().getTukang();
+            if (tkg != null) {
+                courierName = tkg.getNamaLengkap();
             }
         }
 
@@ -198,7 +197,8 @@ public class EcoTukarService {
             "", // note placeholder
             courierName,
             req.getStatus(),
-            "12:00"
+            "12:00",
+            verifStatus
         );
         pr.setActualWeight(actualWeight);
         return pr;
@@ -212,9 +212,11 @@ public class EcoTukarService {
         
         RequestSampah rs = new RequestSampah(
             custId,
+            pr.getCustomerName(),
             pr.getWasteType(),
             pr.getEstimatedWeight(),
-            pr.getAddress()
+            pr.getAddress(),
+            pr.getNote()
         );
         rs = requestRepo.save(rs);
         return mapToPickupRequest(rs);
@@ -237,15 +239,15 @@ public class EcoTukarService {
                     .findFirst();
             
             if (courier.isPresent()) {
-                Integer courierAkunId = courier.get().getIdAkun();
+                ProfilTukang profTukang = courier.get();
                 // Check if verification record already exists
-                Optional<PermintaanPenjemputan> optVer = verifikasiRepo.findByIdRequest(idRequest);
+                Optional<PermintaanPenjemputan> optVer = verifikasiRepo.findByRequestSampahIdRequest(idRequest);
                 if (!optVer.isPresent()) {
-                    PermintaanPenjemputan pp = new PermintaanPenjemputan(idRequest, courierAkunId);
+                    PermintaanPenjemputan pp = new PermintaanPenjemputan(rs, profTukang);
                     verifikasiRepo.save(pp);
                 } else {
                     PermintaanPenjemputan pp = optVer.get();
-                    pp.setIdTukang(courierAkunId);
+                    pp.setTukang(profTukang);
                     verifikasiRepo.save(pp);
                 }
             }
@@ -273,10 +275,11 @@ public class EcoTukarService {
             requestRepo.save(rs);
 
             // Update PermintaanPenjemputan record
-            Optional<PermintaanPenjemputan> optPp = verifikasiRepo.findByIdRequest(idRequest);
+            Optional<PermintaanPenjemputan> optPp = verifikasiRepo.findByRequestSampahIdRequest(idRequest);
             if (optPp.isPresent()) {
                 PermintaanPenjemputan pp = optPp.get();
                 pp.setBeratAktual(actualWeight);
+                pp.setStatusVerifikasi("VERIFIED");
                 verifikasiRepo.save(pp);
             }
 
@@ -300,7 +303,7 @@ public class EcoTukarService {
         
         for (RequestSampah rs : completed) {
             double wt = rs.getBeratEstimasi();
-            Optional<PermintaanPenjemputan> pp = verifikasiRepo.findByIdRequest(rs.getIdRequest());
+            Optional<PermintaanPenjemputan> pp = verifikasiRepo.findByRequestSampahIdRequest(rs.getIdRequest());
             if (pp.isPresent() && pp.get().getBeratAktual() > 0) {
                 wt = pp.get().getBeratAktual();
             }

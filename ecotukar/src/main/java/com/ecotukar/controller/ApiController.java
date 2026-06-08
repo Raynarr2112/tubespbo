@@ -177,7 +177,7 @@ public class ApiController {
         String addr = (customer != null) ? customer.getAddress() : "Alamat";
 
         PickupRequest req = new PickupRequest(
-            null, email, name, addr, wasteType, weight, date, note, "Belum", "PENDING", "12:00"
+            null, email, name, addr, wasteType, weight, date, note, "Belum", "PENDING", "12:00", "UNVERIFIED"
         );
         return service.addPickup(req);
     }
